@@ -1,10 +1,10 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Todo} from "../todo.service";
 
 @Component({
   selector: 'app-todo-item',
   template: `
-      <div class="task-indicator">
+      <div class="task-indicator" (click)="deleteItem()">
         {{ item.task }}
       </div>
       <div class="priority-indicator" [style.background-color]="color">
@@ -16,6 +16,7 @@ import {Todo} from "../todo.service";
 export class TodoItemComponent {
 
   @Input() item!: Todo;
+  @Output() delete = new EventEmitter<Todo>();
 
   get color() {
     switch (this.item.priority) {
@@ -26,5 +27,9 @@ export class TodoItemComponent {
       case 3:
         return 'red';
     }
+  }
+
+  deleteItem() {
+    this.delete.emit(this.item);
   }
 }
